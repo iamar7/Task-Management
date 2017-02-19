@@ -1,0 +1,15 @@
+{{extend 'layout.html'}}
+<table>
+    <td>
+        <tr> Title </tr>
+        <tr> Status</tr>
+        <tr> Timeleft </tr>
+    </td>
+    {{for i in s:}}
+    <td>
+        <tr>{{=i.Task}}</tr>
+        <tr>{{=i.status}}</tr>
+        <rt>{{=i.Deadline-current}}</tr>
+    </td>
+{{pass}}
+</table>

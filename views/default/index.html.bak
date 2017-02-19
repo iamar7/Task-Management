@@ -1,0 +1,20 @@
+{{extend 'extended.html'}}
+<div id="web2py_user_form">
+    {{=form}}
+    {{if request.args(0)=='login':}}
+    {{if not 'register' in auth.settings.actions_disabled:}}
+    <br/><a href="{{=URL(args='register')}}">register</a>
+    {{pass}}
+    {{if not 'request_reset_password' in auth.settings.actions_disabled:}}
+    <br/>
+    <a href="{{=URL(args='request_reset_password')}}">lost password</a>
+    {{pass}}
+    {{pass}}
+</div>
+<style>
+    #web2py_user_form{float:left}
+    #yo{float:right;margin-right:20%}
+</style>
+<h2 id='yo'>
+    Welcome to Task!
+</h2>

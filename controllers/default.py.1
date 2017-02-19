@@ -1,0 +1,189 @@
+# -*- coding: utf-8 -*-
+# this file is released under public domain and you can use without limitations
+
+#########################################################################
+## This is a sample controller
+## - index is the default action of any application
+## - user is required for authentication and authorization
+## - download is for downloading files uploaded in the db (does streaming)
+#########################################################################
+def index():
+    """
+    example action using the internationalization operator T and flash
+    rendered by views/default/index.html or views/generic.html
+
+    if you need a simple wiki simply replace the two lines below with:
+    return auth.wiki()
+    """
+    auth.settings.login_next=URL('incomplete')
+    return dict(form=auth())
+def show1():
+    data = request.args(0)
+    rows = db(db.upload.id==data).select()
+    po = db(db.upload.id==data).select().first()
+    que=str(po.Date_of_Upload)
+    '''a=que[0],que[1],que[2],que[3]
+    if (que[5]=='0'):
+        if (que[6]=='1'):
+            d='January'
+        if (que[6]=='2'):
+            d='February'
+        if (que[6]=='3'):
+            d='March'
+        if (que[6]=='4'):
+            d='April'
+        if (que[6]=='5'):
+            d='May'
+        if (que[6]=='6'):
+            d='June'
+        if (que[6]=='7'):
+            d='July'
+        if (que[6]=='8'):
+            d='August'
+        if (que[6]=='9'):
+            d='September'
+    elif (que[5]=='1'):
+        if (que[6]=='0'):
+            d='October'
+        if (que[6]=='1'):
+            d='November'
+        if (que[6]=='2'):
+            d='December'
+    e=que[8],que[9]'''
+    db.post.upload.default = data
+    db.post.created_on.default = request.now.date()
+    db.post.created_by.default = auth.user.username
+    form = SQLFORM(db.post).process() if auth.user else None
+    comments = db(db.post).select()
+    return dict(form=form, comments=comments, data=data, rows=rows)
+  
+@auth.requires_login()
+
+
+def user():
+    """
+    exposes:
+    http://..../[app]/default/user/login
+    http://..../[app]/default/user/logout
+    http://..../[app]/default/user/register
+    http://..../[app]/default/user/profile
+    http://..../[app]/default/user/retrieve_password
+    http://..../[app]/default/user/change_password
+    http://..../[app]/default/user/bulk_register
+    use @auth.requires_login()
+        @auth.requires_membership('group name')
+        @auth.requires_permission('read','table name',record_id)
+    to decorate functions that need access control
+    also notice there is http://..../[app]/appadmin/manage/auth to allow administrator to manage users
+    """
+    return dict(form=auth())
+
+
+@cache.action()
+def download():
+    """
+    allows downloading of uploaded files
+    http://..../[app]/default/download/[filename]
+    """
+    return response.download(request, db)
+
+
+def call():
+    """
+    exposes services. for example:
+    http://..../[app]/default/call/jsonrpc
+    decorate with @services.jsonrpc the functions to expose
+    supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
+    """
+    return service()
+@auth.requires_login()
+def task():
+    if(auth.user==None):
+        session.flash=("Please Login First")
+    form=SQLFORM(db.upload)
+    form.vars.Username=auth.user.username
+    form.vars.Date_of_Upload=request.now.date()
+    form.element('textarea[name=Task]')['_style'] = 'font-size:20px;width:450px;height:60px;'
+    form.element('textarea[name=Description]')['_style'] = 'font-size:20px;width:450px;height:60px;'
+    form.element('textarea[name=email]')['_style'] = 'font-size:20px;width:450px;height:60px;'
+    form.element('textarea[name=SubTask1]')['_style'] = 'font-size:20px;width:450px;height:60px;'
+    form.element('textarea[name=SubTask2]')['_style'] = 'font-size:20px;width:450px;height:60px;'
+    form.element('textarea[name=SubTask3]')['_style'] = 'font-size:20px;width:450px;height:60px;'
+    form.element('textarea[name=SubTask4]')['_style'] = 'font-size:20px;width:450px;height:60px;'
+    form.element('textarea[name=SubTask5]')['_style'] = 'font-size:20px;width:450px;height:60px;'
+    form.element('[name=Deadline]')['_style'] = 'font-size:20px;width:450px;height:60px;'
+    
+    if form.process().accepted: 
+        response.flash= 'form accepted'
+        redirect(URL('emailing'))
+        session.flash=("email sent to"auth.user.email)
+    return dict(form=form)
+def emailing():
+    mail.send(to=[auth.user.email],
+              subject='Task created',
+              message='Your task has beem created'
+              )
+    redirect(URL('incomplete'))
+              
+@auth.requires_login()
+def sub():
+    form=SQLFORM(db.subt).process()
+    if form.process().accepted: redirect(URL('task'))
+    return locals()
+@auth.requires_login()
+def incomplete():
+    if (auth.user==None):
+        session.flash = ("Please Login First")
+    row=db(db.upload.Username==auth.user.username).select()
+    b=request.args(0)
+    query=(db.upload.Username==auth.user.username)
+    c=db(query).count()
+    if(b==None):
+        i=0
+    
+    if(b!=None):
+        i=int(b)
+        
+    if(c-i>5 and i>=0):
+        rows=db(db.upload.Username==auth.user.username).select(orderby=~db.upload.id,limitby=(i,i+5))
+    elif(i>=c):
+        if(c%5!=0):
+            i=5*int(c/5)
+        else:
+            i=15*(int(c/5)-1)
+        rows=db(db.upload.Username==auth.user.username).select(orderby=~db.upload.id,limitby=(i,c))
+    elif(i<0):
+        i=0
+        rows=db(db.upload.Username==auth.user.username).select(orderby=~db.upload.id,limitby=(0,5))
+    else:
+        rows=db(db.upload.Username==auth.user.username).select(orderby=~db.upload.id,limitby=(i,c))
+    return dict(rows=rows, c=c, i=i, b=b)
+    return dict(rows=rows)
+
+def home():
+    if (auth.user==None):
+        session.flash = ("Please Login First")
+        '''redirect("http://127.0.0.1:8000/cooking/default/user/login")'''
+    b=request.args(0)
+    query=(db.upload.id>0)
+    c=db(query).count()
+    if (b==None):
+        i=0
+
+    if (b!=None):
+        i=int(b)
+        #c=c-3
+    if (c-i>5 and i>=0):
+        rows = db(db.upload.Username!=None).select(orderby=~db.upload.id, limitby=(i,i+5))
+    elif (i>=c):
+        if (c%5!=0):
+            i=5*int(c/5)
+        else:
+            i=5*(int(c/5)-1)
+        rows = db(db.upload.Username!=None).select(orderby=~db.upload.id, limitby=(i,c))
+    elif (i<0):
+        i=0
+        rows = db(db.upload.Username!=None).select(orderby=~db.upload.id, limitby=(0,5))
+    else:
+        rows = db(db.upload.Username!=None).select(orderby=~db.upload.id, limitby=(i,c))
+    return dict(rows=rows, c=c, i=i, b=b)

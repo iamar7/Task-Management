@@ -1,0 +1,28 @@
+{{extend 'layout.html'}}
+<h2>
+    Comments
+</h2>
+<ul>
+<table class='table'>
+    {{for i,row in enumerate(hello):}}
+    {{if i==items_per_page: break}}
+    <tr>
+        <td>{{=row.email}}</td>
+        <td style="width:0.5%;color:black"><h2>{{=row.Comment}}</h2></td>
+    </tr>
+    {{pass}}
+</table>
+</ul>
+{{if page:}}
+<button>
+    <a href="{{=URL(args=[page-1])}}">Previous</a>
+</button>
+{{pass}}
+{{if page:}}
+<button>
+    <a href="{{=URL(args=[page+1])}}">Next</a>
+</button>
+{{pass}}
+<style>
+    .table{background-color:grey}
+</style>

@@ -1,0 +1,102 @@
+{{extend 'layout.html'}}
+<div id="demo">
+<style>
+.disp {
+	background-color:aqua;
+	font-size: 20px;
+	vertical-align:middle;	
+	border:5px solid #ffffff;
+	border-width:0px 1px 1px 0px;
+	border-radius: 20px;
+	padding:20px;
+	font-family:Arial;
+	width: 100vh;
+	margin: auto;
+	margin-bottom: 50px;
+}
+#nore {
+	margin-left: 220px;
+	font-size: 45px;
+	text-decoration: underline;
+}
+
+#pore {
+	margin-left: 400px;
+	font-size: 25px;
+}
+#des {
+	font-weight: bold;
+}
+.dets {
+	background-color:lightgreen;
+	font-size: 20px;
+	vertical-align:middle;	
+	border:5px solid #ffffff;
+	border-width:0px 1px 1px 0px;
+	border-radius: 20px;
+	padding:30px;
+	font-family:Arial;
+	width: 85vh;
+	margin: auto;
+	margin-bottom: 50px;
+}
+    
+</style>
+{{for row in rows:}}
+<div class='disp'>
+<h1 id="nore"><span id="nor">{{=row.Task}}</span></h1>
+<h2 id="pore">Uploaded by  <em>{{=row.Username}}</em></h2>
+<br>
+
+    <h2><u>Description</u></h2>
+    <ul>
+        <li>{{=row.Description}}</li>
+    </ul>
+<br>
+    <h2><u>Deadline</u></h2>
+<ul>
+    <li id='yoyo'>{{=row.Deadline}}</li>
+</ul>
+    <h2><u>Subtasks</u></h2>
+<ul>
+    <li>{{=row.SubTask1}}</li>
+    <li>{{=row.SubTask2}}</li>
+    <li>{{=row.SubTask3}}</li>
+    <li>{{=row.SubTask4}}</li>
+    <li>{{=row.SubTask5}}</li>
+</ul>
+
+     <h2><u>User Added</u></h2>
+    <ul>
+        {{for i in lists :}}
+        <li>{{=i.nmes}}</li>
+        {{pass}}
+    </ul>
+<div class = "dets">
+<h2 class="comm"><u>Comments:</u></h2>
+{{for post in comments:}}
+<p>{{=post.created_by}} on {{=post.created_on}}
+    says <i><b>{{=post.body}}</b></i></p>
+{{pass}}
+<br>
+{{pass}}
+</div>
+<div class = "dets">
+<h2 class="com"><u>Post a comment:</u></h2>
+{{=form}}
+</div>
+    </div>
+    <script>
+        var nowDate= new Date();
+        var Time1= new Date("{{=row.Deadline}}");
+        var str= 'Deadline completed!';
+        var str2= 'Task Completed!';
+        if(Time1<nowDate){
+            window.onload= function myFunction(){
+                var result1 = str.fontsize(15);
+                var result = result1.fontcolor("red");
+                document.getElementById("demo").innerHTML = result;
+            }
+        }
+        
+    </script>

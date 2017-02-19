@@ -1,0 +1,59 @@
+{{extend 'layout.html'}}
+<style>
+.r{
+    color:blue
+}
+
+#sa{
+    color:green;
+}
+
+#pa{
+    color:black;
+}
+#ma{
+    color:black;
+}
+#ga{
+    color:green;
+}
+</style>
+<center>
+<h1 class='r'>
+{{=fuck.Task}}</h1>
+</center>
+<h2 id='pa' ><u>
+Description:
+    </u></h2>
+<h3 id='sa'>
+{{=fuck.Description}}
+</h3>
+<h2 id='pa' ><u>
+Deadline:
+    </u></h2>
+<h3 id='sa'>
+{{=fuck.Deadline}}
+</h3>
+<br>
+   <h2 id='ma'><u><i>Subtask:</i></u></h2>
+<tr>
+    <td><h3 id = 'ga'>{{=fuck.SubTask1}}</td>
+    <td><br>{{=fuck.SubTask2}}</td>
+    <td><br>{{=fuck.SubTask3}}</td>
+    <td><br>{{=fuck.SubTask4}}</td>
+    <td><br>{{=fuck.SubTask4}}</td>
+    <td><br>{{=fuck.SubTask5}}</td>
+    </h3></tr>
+<div class = "dets">
+<h2 class="comm"><u>Comments:</u></h2>
+{{for post in comments:}}
+<p>{{=post.created_by}} on {{=post.created_on}}
+    says <i><b>{{=post.body}}</b></i></p>
+{{pass}}
+<br>
+{{pass}}
+</div>
+<div class = "dets">
+<h2 class="com"><u>Post a comment:</u></h2>
+{{=form}}
+</div>

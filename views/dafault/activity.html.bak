@@ -1,0 +1,5 @@
+{{extend 'layout.html'}}
+
+<h4>{{=A('create task',_class='btn btn-primary',_href=URL('upload'))}}</h4>
+
+{{=grid}}

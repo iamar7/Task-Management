@@ -1,0 +1,56 @@
+{{extend 'layout.html'}}
+<style>
+    h1 {
+        color:blue;padding-left:0%
+    }
+    a {
+        padding-left:25.6%
+    }
+    .hea {
+	font-size: 50px;
+	color: green;
+	font-weight: bold;
+	text-decoration: underline;
+    }
+    .uppy {
+	background-color:aqua;
+	font-size: 20px;
+	vertical-align:middle;	
+	border:5px solid #ffffff;
+	border-width:0px 1px 1px 0px;
+	border-radius: 20px;
+	text-align:center;
+	padding:30px;
+	font-family:Arial;
+	width: 100vh;
+	margin: auto;
+	margin-bottom: 50px;
+}
+</style>
+<script>
+jQuery(document).ready(function(){
+    jQuery('#upload_SubTask1__row').hide();
+    jQuery('#upload_SubTask1__row').hide();
+    jQuery('#upload_SubTask2__row').hide();
+    jQuery('#upload_SubTask3__row').hide();
+    jQuery('#upload_SubTask4__row').hide();
+    jQuery('#upload_SubTask5__row').hide();
+    jQuery('#upload_SubTasks').change(function(){
+        if(jQuery('#upload_SubTasks').prop('checked')){
+            jQuery('#upload_SubTask1__row').show();
+            jQuery('#upload_SubTask2__row').show();
+            jQuery('#upload_SubTask3__row').show();
+            jQuery('#upload_SubTask4__row').show();
+            jQuery('#upload_SubTask5__row').show();
+        }else { jQuery('#upload_SubTask1__row').hide();
+                jQuery('#upload_SubTask2__row').hide();
+                jQuery('#upload_SubTask3__row').hide();
+                jQuery('#upload_SubTask4__row').hide();
+                jQuery('#upload_SubTask5__row').hide();
+              };});
+    });
+</script>
+<h1 class="hea">Enter Task</h1>
+<div class="uppy">
+{{=form}}
+</div>

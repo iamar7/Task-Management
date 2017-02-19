@@ -1,0 +1,21 @@
+{{extend 'layout.html'}}
+<style>
+    .body{
+background-color:grey;
+    }</style>
+<br>
+<div class="body">
+    
+<button id="search" onclick="location.href = 'http://127.0.0.1:8000/Task1/default/home';">See All Projects</button>
+<br>
+<br>
+<br>
+<h3 id="search21">Search Projects By Title</h3>
+{{=form1}}<br />{{=target_div1}}
+<br>
+<h3 id="search22">Search Projects By Username</h3>
+{{=form2}}<br />{{=target_div2}}
+<br>
+
+<br>
+</div>

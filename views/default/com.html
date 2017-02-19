@@ -1,0 +1,14 @@
+{{extend 'layout.html'}}
+<div class = "dets">
+<h2 class="comm"><u>Comments:</u></h2>
+{{for post in comments:}}
+<p>{{=post.created_by}} on {{=post.created_on}}
+says <i>{{=post.body}}</i></p>
+{{pass}}
+<br>
+{{pass}}
+</div>
+<div class = "dets">
+<h2 class="com"><u>Post a comment:</u></h2>
+{{=form}}
+</div>
